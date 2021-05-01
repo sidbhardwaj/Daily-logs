@@ -1,0 +1,63 @@
+swagger: "2.0"
+consumes:
+  - application/json
+produces:
+  - application/json
+info:
+  description: HTTP server in Go with Swagger endpoints definition
+  title: http-go-server
+  version: 0.1.0
+schemes:
+  - http
+
+paths:
+  /health:
+    get:
+      description: Returns a greeting to the user!
+      operationId: checkHealth
+      produces:
+      - text/plain
+      responses:
+        200:
+          description: Returns a greeting to the user!
+          schema:
+            type: string
+            enum:
+            - OK
+      tags:
+        - health
+  /user/{userID}/todo:
+    post:
+      description: create a new todo for the user
+      operationId: craeteTODO
+      parameters:
+        - name: userID
+          in: path
+          type: string
+          required: true
+          description: The id of the user.
+        - in: body 
+          name: todo
+          schema:
+            $ref: "#/definitions/todo"
+      responses:
+        200:
+          description: Returns the greeting.
+          schema:
+            $ref: "#/definitions/todo"
+        400:
+          description: Invalid characters in "user" were provided.
+      tags:
+        - todo
+
+definitions:
+  todo:
+    type: object
+    title: Todo
+    properties:
+      Title:
+        type: string
+      Description:
+        type: string
+      Status:
+        type: string
