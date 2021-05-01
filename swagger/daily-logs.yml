@@ -26,38 +26,108 @@ paths:
             - OK
       tags:
         - health
-  /user/{userID}/todo:
+  /me/todo:
     post:
       description: create a new todo for the user
       operationId: craeteTODO
       parameters:
-        - name: userID
-          in: path
-          type: string
-          required: true
-          description: The id of the user.
         - in: body 
           name: todo
           schema:
             $ref: "#/definitions/todo"
       responses:
         200:
-          description: Returns the greeting.
+          description: Returns generated todo.
           schema:
             $ref: "#/definitions/todo"
         400:
-          description: Invalid characters in "user" were provided.
+          description: Invalid request.
+          schema:
+            type: object
+            title: Error Response
+            properties: 
+              Code:
+                type: string
+              Message:
+                type: string
+              Details:
+                type: string
+      tags:
+        - todo
+    get:
+      description: List all todo's for a user
+      operationId: listTODO
+      parameters:
+        - $ref: "#/parameters/pageSize"
+        - $ref: "#/parameters/offset"
+      responses:
+        200:
+          description: Returns list of todo for user.
+          schema:
+            $ref: "#/definitions/todo-list"
+        400:
+          description: Invalid request.
+          schema:
+            type: object
+            title: Error Response
+            properties: 
+              Code:
+                type: string
+              Message:
+                type: string
+              Details:
+                type: string
       tags:
         - todo
 
 definitions:
+  todo-list:
+    type: object
+    properties:
+      data:
+        type: array
+        items:
+          $ref: "#/definitions/todo"
+      meta-data:
+        $ref: "#/definitions/meta-data"
+
+  meta-data:
+    type: object
+    title: meta-data
+    properties:
+      totalSize:
+        type: integer
+      offset: 
+        type: integer
+      pageSize: 
+        type: integer
   todo:
     type: object
     title: Todo
     properties:
+      ID:
+        type: integer
+        format: int64
       Title:
         type: string
       Description:
         type: string
       Status:
         type: string
+      CreatedAT:
+        type: string
+      UpdatedAT:
+        type: string
+
+parameters:
+  pageSize:
+    name: pageSize
+    in: query
+    type: integer
+    default: 10
+  offset:
+    name: offset
+    in: query
+    type: integer
+    default: 0
+    x-nullable: true

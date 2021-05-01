@@ -8,7 +8,6 @@ import (
 	ini "github.com/sidbhardwaj/Daily-logs/init"
 	"github.com/sidbhardwaj/Daily-logs/logmanager"
 
-	"github.com/sirupsen/logrus"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -17,6 +16,7 @@ var (
 )
 
 func main() {
+	log.SetLevel(log.DebugLevel)
 	initd()
 	db := ini.GetDB()
 	log.Debugf("main func")
@@ -30,7 +30,7 @@ func main() {
 	logmanager.Configure(api, logService)
 
 	if err := cmd.Start(api, port); err != nil {
-		logrus.Fatal("Failed to start", err)
+		log.Fatal("Failed to start", err)
 	}
 }
 
